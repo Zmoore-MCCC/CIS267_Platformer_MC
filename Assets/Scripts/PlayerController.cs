@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     //max number of jumps a player can perform until they need to touch the ground again
     [SerializeField]
     private int maxNumJumps;
+
+    //where on the player the hat should be placed.
+    public GameObject doubleJumpHatLocation;
     
     void Start()
     {
@@ -68,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private void jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && numJumps <= maxNumJumps &&)
+        if(Input.GetKeyDown(KeyCode.Space) && numJumps <= maxNumJumps)
         {
             player_rb.linearVelocity = new Vector2(player_rb.linearVelocity.x, jumpForce);
             numJumps++;
@@ -102,8 +105,16 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("DoubleJump"))
         {
             maxNumJumps = 2;
-            Destroy(collision.gameObject);
+            GameObject hat = collision.gameObject;
+            equipDoubleJumpHat(hat);
+            //Destroy(collision.gameObject);
         }
+    }
+    
+    private void equipDoubleJumpHat(GameObject hat)
+    {
+        hat.transform.position = doubleJumpHatLocation.transform.position;
+        hat.gameObject.transform.SetParent(this.gameObject.transform);
     }
 
     //private void OnCollisionStay2D(Collision2D collision)
